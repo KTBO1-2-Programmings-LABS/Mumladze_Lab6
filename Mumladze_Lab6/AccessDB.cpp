@@ -57,6 +57,23 @@ Void AccessDB::CloseDB() {
 
 
 
+ErrorsDB AccessDB::Create(BookNode^ node) {
+    try {
+        String^ query = "INSERT INTO Books (ISBN, Title, Author, PublishingDate, PageCount) VALUES (?, ?, ?, ?, ?)";
+        OleDbCommand^ command = gcnew OleDbCommand(query, dbConnect);
+        command->Parameters->AddWithValue("?", node->ISBN);
+        command->Parameters->AddWithValue("?", node->title);
+        command->Parameters->AddWithValue("?", node->author);
+        command->Parameters->AddWithValue("?", node->date);
+        command->Parameters->AddWithValue("?", node->pageCount);
+        command->ExecuteNonQuery();
+        return DB_OK;
+    }
+    catch (Exception^ e) {
+        return DB_CREATE_ERROR;
+    }
+}
+
 OleDbDataReader^ AccessDB::Read() {
     String^ query = "SELECT * FROM Books";
     OleDbCommand^ command = gcnew OleDbCommand(query, this->dbConnect);
@@ -68,3 +85,4 @@ OleDbDataReader^ AccessDB::Read() {
         return nullptr;
     }
 }
+

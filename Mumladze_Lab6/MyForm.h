@@ -31,13 +31,13 @@ namespace MumladzeLab6 {
 	private: System::Windows::Forms::ToolStripMenuItem^ updateNodeToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ deleteNodeToolStripMenuItem;
 	private: System::Windows::Forms::DataGridView^ dataGridView;
+	private: System::Windows::Forms::ToolStripMenuItem^ errorCodesToolStripMenuItem;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ ID;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ ISBN;
-	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Title;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Author;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Date;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ PageCount;
-	private: System::Windows::Forms::ToolStripMenuItem^ errorCodesToolStripMenuItem;
 
 	protected:
 	
@@ -60,14 +60,14 @@ namespace MumladzeLab6 {
 			this->readNodeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->updateNodeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->deleteNodeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->errorCodesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->dataGridView = (gcnew System::Windows::Forms::DataGridView());
 			this->ID = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->ISBN = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Title = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Author = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Date = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->PageCount = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->errorCodesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			this->SuspendLayout();
@@ -128,6 +128,13 @@ namespace MumladzeLab6 {
 			this->deleteNodeToolStripMenuItem->Text = L"Удалить запись";
 			this->deleteNodeToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::DeleteNodeToolStripMenuItem_Click);
 			// 
+			// errorCodesToolStripMenuItem
+			// 
+			this->errorCodesToolStripMenuItem->Name = L"errorCodesToolStripMenuItem";
+			this->errorCodesToolStripMenuItem->Size = System::Drawing::Size(109, 23);
+			this->errorCodesToolStripMenuItem->Text = L"Коды ошибок";
+			this->errorCodesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ErrorCodesToolStripMenuItem_Click);
+			// 
 			// dataGridView
 			// 
 			this->dataGridView->AllowUserToAddRows = false;
@@ -135,7 +142,7 @@ namespace MumladzeLab6 {
 			this->dataGridView->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->dataGridView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(6) {
 				this->ID, this->ISBN,
-					this->Date, this->Title, this->Author, this->PageCount
+					this->Title, this->Author, this->Date, this->PageCount
 			});
 			this->dataGridView->Location = System::Drawing::Point(20, 40);
 			this->dataGridView->Name = L"dataGridView";
@@ -155,12 +162,6 @@ namespace MumladzeLab6 {
 			this->ISBN->Name = L"ISBN";
 			this->ISBN->ReadOnly = true;
 			// 
-			// Date
-			// 
-			this->Date->HeaderText = L"Дата публикации";
-			this->Date->Name = L"Date";
-			this->Date->ReadOnly = true;
-			// 
 			// Title
 			// 
 			this->Title->HeaderText = L"Заголовок книги";
@@ -173,24 +174,23 @@ namespace MumladzeLab6 {
 			this->Author->Name = L"Author";
 			this->Author->ReadOnly = true;
 			// 
+			// Date
+			// 
+			this->Date->HeaderText = L"Дата публикации";
+			this->Date->Name = L"Date";
+			this->Date->ReadOnly = true;
+			// 
 			// PageCount
 			// 
 			this->PageCount->HeaderText = L"Число страниц";
 			this->PageCount->Name = L"PageCount";
 			this->PageCount->ReadOnly = true;
 			// 
-			// errorCodesToolStripMenuItem
-			// 
-			this->errorCodesToolStripMenuItem->Name = L"errorCodesToolStripMenuItem";
-			this->errorCodesToolStripMenuItem->Size = System::Drawing::Size(109, 23);
-			this->errorCodesToolStripMenuItem->Text = L"Коды ошибок";
-			this->errorCodesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ErrorCodesToolStripMenuItem_Click);
-			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(684, 411);
+			this->ClientSize = System::Drawing::Size(685, 410);
 			this->Controls->Add(this->dataGridView);
 			this->Controls->Add(this->menuStrip);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;

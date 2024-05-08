@@ -121,15 +121,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AccessDB.cpp" />
+    <ClCompile Include="GetData.cpp" />
     <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccessDB.h" />
+    <ClInclude Include="GetData.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GetData.resx">
+      <DependentUpon>GetData.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
     </EmbeddedResource>

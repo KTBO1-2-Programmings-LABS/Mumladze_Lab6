@@ -1,5 +1,6 @@
 #include "MyForm.h"
 #include "AccessDB.h"
+#include "GetData.h"
 
 using namespace System;
 using namespace System::Windows;
@@ -57,10 +58,15 @@ Void MyForm::OpenDataBaseToolStripMenuItem_Click(Object^ sender, EventArgs^ e) {
 }
 
 Void MyForm::CreateNodeToolStripMenuItem_Click(Object^ sender, EventArgs^ e) {
-
+	GetData^ getDataForm = gcnew GetData(nullptr);
+	if (getDataForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+		BookNode^ node = getDataForm->GetDataFromBox();
+		this->dataBase->Create(node);
+	}
 }
 
 Void MyForm::ReadNodeToolStripMenuItem_Click(Object^ sender, EventArgs^ e) {
+	this->dataGridView->Rows->Clear();
 	OleDbDataReader^ reader = this->dataBase->Read();
 	if (reader) {
 		while (reader->Read()) {
