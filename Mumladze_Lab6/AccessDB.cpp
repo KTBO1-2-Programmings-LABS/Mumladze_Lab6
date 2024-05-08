@@ -35,17 +35,17 @@ ErrorsDB AccessDB::CheckDB() {
                     }
                 }
                 if (!(hasID && hasISBN && hasPublishingDate && hasTitle && hasAuthor && hasPageCount)) {
-                    this->dbConnect->Close();
                     return DB_WRONG_COLUMNS;
                 }
-                this->dbConnect->Close();
                 return DB_OK;
+            }
+            else {
+                return DB_WRONG_TABLES;
             }
         }
         dbConnect->Close();
     }
 	catch (Exception^ e) {
-		this->dbConnect->Close();
 		return DB_CANNOT_CONNECT;
 	}
 }
@@ -53,4 +53,18 @@ ErrorsDB AccessDB::CheckDB() {
 Void AccessDB::CloseDB() {
     delete this->dbConnect;
     this->dbConnect = nullptr;
+}
+
+
+
+OleDbDataReader^ AccessDB::Read() {
+    String^ query = "SELECT * FROM Books";
+    OleDbCommand^ command = gcnew OleDbCommand(query, this->dbConnect);
+    OleDbDataReader^ reader = command->ExecuteReader();
+    if (reader->HasRows) {
+        return reader;
+    }
+    else {
+        return nullptr;
+    }
 }

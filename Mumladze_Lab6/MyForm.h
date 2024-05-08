@@ -37,6 +37,7 @@ namespace MumladzeLab6 {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Title;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Author;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ PageCount;
+	private: System::Windows::Forms::ToolStripMenuItem^ errorCodesToolStripMenuItem;
 
 	protected:
 	
@@ -66,13 +67,17 @@ namespace MumladzeLab6 {
 			this->Title = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Author = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->PageCount = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->errorCodesToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// menuStrip
 			// 
-			this->menuStrip->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->actionsToolStripMenuItem });
+			this->menuStrip->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->actionsToolStripMenuItem,
+					this->errorCodesToolStripMenuItem
+			});
 			this->menuStrip->Location = System::Drawing::Point(0, 0);
 			this->menuStrip->Name = L"menuStrip";
 			this->menuStrip->Size = System::Drawing::Size(684, 27);
@@ -174,6 +179,13 @@ namespace MumladzeLab6 {
 			this->PageCount->Name = L"PageCount";
 			this->PageCount->ReadOnly = true;
 			// 
+			// errorCodesToolStripMenuItem
+			// 
+			this->errorCodesToolStripMenuItem->Name = L"errorCodesToolStripMenuItem";
+			this->errorCodesToolStripMenuItem->Size = System::Drawing::Size(109, 23);
+			this->errorCodesToolStripMenuItem->Text = L"Коды ошибок";
+			this->errorCodesToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ErrorCodesToolStripMenuItem_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -197,11 +209,13 @@ namespace MumladzeLab6 {
 	
 	private: AccessDB^ dataBase;
 	
+	private: System::Void ErrorCodesToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void OpenDataBaseToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void CreateNodeToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void ReadNodeToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void UpdateNodeToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Void DeleteNodeToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e);
 	
+
 	};
 }
