@@ -177,6 +177,7 @@ namespace MumladzeLab6 {
 		}
 #pragma endregion
 	
+	private: Int32 ID = -1;
 	private: System::Void BoxPages_KeyPress(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e);
 	private: System::Void ButtonSave_Click(System::Object^ sender, System::EventArgs^ e);
 	private: System::Boolean IsAnyFieldUncorrect();

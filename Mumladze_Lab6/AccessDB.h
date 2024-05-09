@@ -3,6 +3,7 @@
 using namespace System;
 using namespace System::Data;
 using namespace System::Data::OleDb;
+using namespace System::Collections::Generic;
 
 enum ErrorsDB {
 	DB_OK = 0,
@@ -11,9 +12,11 @@ enum ErrorsDB {
 	DB_WRONG_COLUMNS = 3,
 	DB_READ_ERROR = 4,
 	DB_CREATE_ERROR = 5,
+	DB_UPDATE_ERROR = 6,
 };
 
 ref struct BookNode {
+	Int32 ID;
 	String^ ISBN;
 	DateTime^ date;
 	String^ title;
@@ -24,11 +27,13 @@ ref struct BookNode {
 ref class AccessDB {
 private:
 	OleDbConnection^ dbConnect;
+
 public:
 	ErrorsDB OpenDB(String^ path);
 	ErrorsDB CheckDB();
 	Void CloseDB();
 
 	ErrorsDB Create(BookNode^ node);
-	OleDbDataReader^ Read();
+	List<BookNode^>^ Read();
+	ErrorsDB Update(BookNode^ node);
 };

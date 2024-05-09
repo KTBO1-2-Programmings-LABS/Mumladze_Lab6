@@ -12,42 +12,55 @@ ErrorsDB AccessDB::OpenDB(String^ path) {
 }
 
 ErrorsDB AccessDB::CheckDB() {
+    ErrorsDB status = DB_OK;
 	try {
         this->dbConnect->Open();
-        DataTable^ schemaTable = dbConnect->GetSchema("Tables");
-        for each (DataRow^ row in schemaTable->Rows) {
-            if (row["TABLE_NAME"]->ToString() == "Books") {
-                DataTable^ columns = dbConnect->GetSchema("Columns", gcnew array<String^>{nullptr, nullptr, "Books", nullptr});
+        DataTable^ schemaTable = dbConnect->GetSchema("Tables", gcnew array<String^> {nullptr, nullptr, nullptr, "TABLE"});
+        if (schemaTable->Rows->Count == 1) {
+            DataRow^ table = schemaTable->Rows[0];
+            if (table["TABLE_NAME"]->ToString() == "Books") {
+                DataTable^ columns = dbConnect->GetSchema("Columns", gcnew array<String^> {nullptr, nullptr, "Books", nullptr});
                 bool hasID = false, hasISBN = false, hasPublishingDate = false, hasTitle = false, hasAuthor = false, hasPageCount = false;
                 for each (DataRow ^ col in columns->Rows) {
                     String^ columnName = col["COLUMN_NAME"]->ToString();
                     String^ dataType = col["DATA_TYPE"]->ToString();
 
-                    if (columnName == "ID" && dataType == "3") hasID = true;
-                    else if (columnName == "ISBN" && dataType == "130") hasISBN = true;
-                    else if (columnName == "Title" && dataType == "130") hasTitle = true;
-                    else if (columnName == "Author" && dataType == "130") hasAuthor = true;
-                    else if (columnName == "PublishingDate" && dataType == "7") hasPublishingDate = true;
-                    else if (columnName == "PageCount" && dataType == "3") hasPageCount = true;
+                    if (columnName == "ID" && dataType == "3")
+                        hasID = true;
+                    else if (columnName == "ISBN" && dataType == "130")
+                        hasISBN = true;
+                    else if (columnName == "Title" && dataType == "130")
+                        hasTitle = true;
+                    else if (columnName == "Author" && dataType == "130")
+                        hasAuthor = true;
+                    else if (columnName == "PublishingDate" && dataType == "7")
+                        hasPublishingDate = true;
+                    else if (columnName == "PageCount" && dataType == "3")
+                        hasPageCount = true;
                     else {
-                        this->dbConnect->Close();
-                        return DB_WRONG_COLUMNS;
+                        status = DB_WRONG_COLUMNS;
+                        break;
                     }
                 }
-                if (!(hasID && hasISBN && hasPublishingDate && hasTitle && hasAuthor && hasPageCount)) {
-                    return DB_WRONG_COLUMNS;
-                }
-                return DB_OK;
+                if (!(hasID && hasISBN && hasPublishingDate && hasTitle && hasAuthor && hasPageCount))
+                    status = DB_WRONG_COLUMNS;
+                else
+                    status = DB_OK;
             }
-            else {
-                return DB_WRONG_TABLES;
-            }
+            else 
+                status = DB_WRONG_TABLES;
         }
-        dbConnect->Close();
+        else 
+            status = DB_WRONG_TABLES;
     }
 	catch (Exception^ e) {
-		return DB_CANNOT_CONNECT;
+		status = DB_CANNOT_CONNECT;
 	}
+    finally {
+        if (this->dbConnect->State == ConnectionState::Open)
+            this->dbConnect->Close();
+    }
+    return status;
 }
 
 Void AccessDB::CloseDB() {
@@ -58,31 +71,80 @@ Void AccessDB::CloseDB() {
 
 
 ErrorsDB AccessDB::Create(BookNode^ node) {
+    ErrorsDB status;
     try {
+        this->dbConnect->Open();
         String^ query = "INSERT INTO Books (ISBN, Title, Author, PublishingDate, PageCount) VALUES (?, ?, ?, ?, ?)";
-        OleDbCommand^ command = gcnew OleDbCommand(query, dbConnect);
+        OleDbCommand^ command = gcnew OleDbCommand(query, this->dbConnect);
         command->Parameters->AddWithValue("?", node->ISBN);
         command->Parameters->AddWithValue("?", node->title);
         command->Parameters->AddWithValue("?", node->author);
         command->Parameters->AddWithValue("?", node->date);
         command->Parameters->AddWithValue("?", node->pageCount);
         command->ExecuteNonQuery();
-        return DB_OK;
+        status = DB_OK;
     }
     catch (Exception^ e) {
-        return DB_CREATE_ERROR;
+        status = DB_CREATE_ERROR;
     }
+    finally {
+        if (this->dbConnect->State == ConnectionState::Open)
+            this->dbConnect->Close();
+    }
+    return status;
 }
 
-OleDbDataReader^ AccessDB::Read() {
+List<BookNode^>^ AccessDB::Read() {
     String^ query = "SELECT * FROM Books";
     OleDbCommand^ command = gcnew OleDbCommand(query, this->dbConnect);
-    OleDbDataReader^ reader = command->ExecuteReader();
-    if (reader->HasRows) {
-        return reader;
+    List<BookNode^>^ bookList = gcnew List<BookNode^>();
+    
+    try {
+        this->dbConnect->Open();
+        OleDbDataReader^ reader = command->ExecuteReader();
+        while (reader->Read()) {
+            BookNode^ book = gcnew BookNode();
+            book->ID = Convert::ToInt32(reader["ID"]);
+            book->ISBN = reader["ISBN"]->ToString();
+            book->date = static_cast<DateTime^>(reader["PublishingDate"]);
+            book->title = reader["Title"]->ToString();
+            book->author = reader["Author"]->ToString();
+            book->pageCount = Convert::ToInt32(reader["PageCount"]);
+            bookList->Add(book);
+        }
     }
-    else {
+    catch (Exception^ e) {
+        this->dbConnect->Close();
         return nullptr;
     }
+    finally {
+        if (this->dbConnect->State == ConnectionState::Open)
+            this->dbConnect->Close();
+    }
+    return bookList;
 }
 
+ErrorsDB AccessDB::Update(BookNode^ node) {
+    ErrorsDB status = DB_OK;
+    try {
+        this->dbConnect->Open();
+        String^ query = "UPDATE Books SET ISBN = ?, PublishingDate = ?, Title = ?, Author = ?, PageCount = ? WHERE ID = ?";
+        OleDbCommand^ command = gcnew OleDbCommand(query, this->dbConnect);
+        command->Parameters->AddWithValue("?", node->ISBN);
+        command->Parameters->AddWithValue("?", node->date);
+        command->Parameters->AddWithValue("?", node->title);
+        command->Parameters->AddWithValue("?", node->author);
+        command->Parameters->AddWithValue("?", node->pageCount);
+        command->Parameters->AddWithValue("?", node->ID);
+        command->ExecuteNonQuery();
+        status = DB_OK;
+    }
+    catch (Exception^ e) {
+        status = DB_UPDATE_ERROR;
+    }
+    finally {
+        if (this->dbConnect->State == ConnectionState::Open)
+            this->dbConnect->Close();
+    }
+    return status;
+}

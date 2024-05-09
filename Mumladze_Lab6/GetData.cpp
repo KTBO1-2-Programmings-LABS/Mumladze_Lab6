@@ -5,6 +5,7 @@ using namespace MumladzeLab6;
 GetData::GetData(BookNode^ node) {
 	InitializeComponent();
 	if (node != nullptr) {
+		this->ID = node->ID;
 		this->boxISBN->Text = node->ISBN;
 		this->boxTitle->Text = node->title;
 		this->boxAuthor->Text = node->author;
@@ -24,7 +25,7 @@ GetData::~GetData() {
 }
 
 Void GetData::BoxPages_KeyPress(Object^ sender, KeyPressEventArgs^ e) {
-	if ('0' <= e->KeyChar && e->KeyChar <= '9') {
+	if ('0' <= e->KeyChar && e->KeyChar <= '9' || e->KeyChar == '\b') {
 		e->Handled = false;
 	}
 	else {
@@ -61,6 +62,7 @@ Boolean GetData::IsAnyFieldUncorrect() {
 
 BookNode^ GetData::GetDataFromBox() {
 	BookNode^ node = gcnew BookNode();
+	node->ID = this->ID;
 	node->ISBN = this->boxISBN->Text;
 	node->title = this->boxTitle->Text;
 	node->author = this->boxAuthor->Text;
