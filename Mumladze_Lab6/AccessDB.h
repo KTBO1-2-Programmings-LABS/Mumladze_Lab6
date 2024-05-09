@@ -13,6 +13,7 @@ enum ErrorsDB {
 	DB_READ_ERROR = 4,
 	DB_CREATE_ERROR = 5,
 	DB_UPDATE_ERROR = 6,
+	DB_DELETE_ERROR = 7
 };
 
 ref struct BookNode {
@@ -36,4 +37,5 @@ public:
 	ErrorsDB Create(BookNode^ node);
 	List<BookNode^>^ Read();
 	ErrorsDB Update(BookNode^ node);
+	ErrorsDB Delete(Int32 ID);
 };

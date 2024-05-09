@@ -71,7 +71,7 @@ Void AccessDB::CloseDB() {
 
 
 ErrorsDB AccessDB::Create(BookNode^ node) {
-    ErrorsDB status;
+    ErrorsDB status = DB_OK;
     try {
         this->dbConnect->Open();
         String^ query = "INSERT INTO Books (ISBN, Title, Author, PublishingDate, PageCount) VALUES (?, ?, ?, ?, ?)";
@@ -141,6 +141,26 @@ ErrorsDB AccessDB::Update(BookNode^ node) {
     }
     catch (Exception^ e) {
         status = DB_UPDATE_ERROR;
+    }
+    finally {
+        if (this->dbConnect->State == ConnectionState::Open)
+            this->dbConnect->Close();
+    }
+    return status;
+}
+
+ErrorsDB AccessDB::Delete(Int32 ID) {
+    ErrorsDB status = DB_OK;
+    try {
+        this->dbConnect->Open();
+        String^ query = "DELETE FROM Books WHERE ID = ?";
+        OleDbCommand^ command = gcnew OleDbCommand(query, this->dbConnect);
+        command->Parameters->AddWithValue("?", ID);
+        command->ExecuteNonQuery();
+        status = DB_OK;
+    }
+    catch (Exception^ e) {
+        status = DB_DELETE_ERROR;
     }
     finally {
         if (this->dbConnect->State == ConnectionState::Open)

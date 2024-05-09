@@ -69,7 +69,7 @@ namespace MumladzeLab6 {
 			// labelISBN
 			// 
 			this->labelISBN->AutoSize = true;
-			this->labelISBN->Location = System::Drawing::Point(13, 39);
+			this->labelISBN->Location = System::Drawing::Point(12, 35);
 			this->labelISBN->Name = L"labelISBN";
 			this->labelISBN->Size = System::Drawing::Size(32, 13);
 			this->labelISBN->TabIndex = 3;
@@ -85,7 +85,7 @@ namespace MumladzeLab6 {
 			// labelTitle
 			// 
 			this->labelTitle->AutoSize = true;
-			this->labelTitle->Location = System::Drawing::Point(12, 83);
+			this->labelTitle->Location = System::Drawing::Point(12, 79);
 			this->labelTitle->Name = L"labelTitle";
 			this->labelTitle->Size = System::Drawing::Size(89, 13);
 			this->labelTitle->TabIndex = 5;
@@ -101,7 +101,7 @@ namespace MumladzeLab6 {
 			// labelAuthor
 			// 
 			this->labelAuthor->AutoSize = true;
-			this->labelAuthor->Location = System::Drawing::Point(12, 127);
+			this->labelAuthor->Location = System::Drawing::Point(12, 123);
 			this->labelAuthor->Name = L"labelAuthor";
 			this->labelAuthor->Size = System::Drawing::Size(51, 13);
 			this->labelAuthor->TabIndex = 7;
@@ -119,7 +119,7 @@ namespace MumladzeLab6 {
 			// labelDate
 			// 
 			this->labelDate->AutoSize = true;
-			this->labelDate->Location = System::Drawing::Point(12, 171);
+			this->labelDate->Location = System::Drawing::Point(12, 167);
 			this->labelDate->Name = L"labelDate";
 			this->labelDate->Size = System::Drawing::Size(95, 13);
 			this->labelDate->TabIndex = 9;
@@ -136,7 +136,7 @@ namespace MumladzeLab6 {
 			// labelPages
 			// 
 			this->labelPages->AutoSize = true;
-			this->labelPages->Location = System::Drawing::Point(12, 215);
+			this->labelPages->Location = System::Drawing::Point(12, 211);
 			this->labelPages->Name = L"labelPages";
 			this->labelPages->Size = System::Drawing::Size(83, 13);
 			this->labelPages->TabIndex = 11;

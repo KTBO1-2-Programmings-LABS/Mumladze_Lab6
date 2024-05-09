@@ -35,7 +35,7 @@ MyForm::~MyForm() {
 Void MyForm::ErrorCodesToolStripMenuItem_Click(Object^ sender, EventArgs^ e) {
 	String^ str = gcnew String("1 - невозможно соединиться с БД\n2 - БД не соответствует формату программы\n" + 
 		"3 - таблица Books не соответствует формату программы\n4 - ошибка чтения БД\n" + 
-		"5 - ошибка создания записи в БД\n6 - ошибка обновления записи в БД");
+		"5 - ошибка создания записи в БД\n6 - ошибка обновления записи в БД\n7 - ошибка удаления из БД");
 	MessageBox::Show(str, "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
 }
 
@@ -126,6 +126,22 @@ Void MyForm::UpdateNodeToolStripMenuItem_Click(Object^ sender, EventArgs^ e) {
 }
 
 Void MyForm::DeleteNodeToolStripMenuItem_Click(Object^ sender, EventArgs^ e) {
-
+	if (dataGridView->SelectedRows->Count != 1) {
+		MessageBox::Show("Пожалуйста, выберите одну строку для удаления", "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+	DataGridViewRow^ selectedRow = dataGridView->SelectedRows[0];
+	Int32 ID = Convert::ToInt32(selectedRow->Cells["ID"]->Value);
+	ErrorsDB status = this->dataBase->Delete(ID);
+	if (status == DB_OK) {
+		for each (DataGridViewRow ^ row in this->dataGridView->Rows) {
+			if (Convert::ToInt32(row->Cells["ID"]->Value) == ID) {
+				this->dataGridView->Rows->Remove(row);
+				break;
+			}
+		}
+	}
+	else {
+		MessageBox::Show("Ошибка код " + (static_cast<int>(status)).ToString(), "Ошибка", MessageBoxButtons::OK, MessageBoxIcon::Error);
+	}
 }
-
